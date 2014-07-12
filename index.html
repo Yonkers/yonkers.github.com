@@ -9,7 +9,9 @@
   <meta name="author" content="Leeo">
 
   
-  <meta name="description" content="基于Octopress 和Github得博客终于搭建好了，开始记录工作生活点滴！😄😄😄
+  <meta name="description" content="基于Octopress 和Github得博客终于搭建好了，开始记录工作生活点滴！😄😄😄 参考博文： 1.基于Github和Octopress搭建属于自己的博客
+2.定制Octopress
+3.象写程序一样写博客：搭建基于github的博客
 ">
   
 
@@ -32,6 +34,27 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=Playball" rel="stylesheet" type="text/css">
 -->
+
+<!-- this is used for open link in a new tab -->
+<script type="text/javascript">
+
+function addBlankTargetForLinks () {
+
+  $('a[href^="http"]').each(function(){
+
+      $(this).attr('target', '_blank');
+
+  });
+
+}
+
+$(document).bind('DOMNodeInserted', function(event) {
+
+  addBlankTargetForLinks();
+
+});
+
+</script>
 
   
 
@@ -102,7 +125,13 @@
   </header>
 
 
-  <div class="entry-content"><p>基于<strong>Octopress</strong> <strong>和Github</strong>得博客终于搭建好了，开始记录工作生活点滴！😄😄😄</p>
+  <div class="entry-content"><h4>基于<strong>Octopress</strong> <strong>和Github</strong>得博客终于搭建好了，开始记录工作生活点滴！😄😄😄</h4>
+
+<p>参考博文：</p>
+
+<p><strong>1.<a href="http://msching.github.io/blog/2014/04/11/starting/" title="Title">基于Github和Octopress搭建属于自己的博客</a></strong>
+<strong>2.<a href="http://biaobiaoqi.me/blog/2013/07/10/decorate-octopress/" title="Title">定制Octopress</a></strong>
+<strong>3.<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/" title="Title">象写程序一样写博客：搭建基于github的博客</a></strong></p>
 </div>
   
   
