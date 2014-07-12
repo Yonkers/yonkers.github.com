@@ -4,7 +4,7 @@
   <title><![CDATA[Leeo's Blog]]></title>
   <link href="http://Yonkers.github.io/atom.xml" rel="self"/>
   <link href="http://Yonkers.github.io/"/>
-  <updated>2014-07-12T20:48:23+08:00</updated>
+  <updated>2014-07-12T21:09:16+08:00</updated>
   <id>http://Yonkers.github.io/</id>
   <author>
     <name><![CDATA[Leeo]]></name>
@@ -22,9 +22,11 @@
 
 <p>参考博文：</p>
 
-<p><strong>1.<a href="http://msching.github.io/blog/2014/04/11/starting/" title="Title">基于Github和Octopress搭建属于自己的博客</a></strong>
-<strong>2.<a href="http://biaobiaoqi.me/blog/2013/07/10/decorate-octopress/" title="Title">定制Octopress</a></strong>
-<strong>3.<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/" title="Title">象写程序一样写博客：搭建基于github的博客</a></strong></p>
+<p><strong>1.<a href="http://msching.github.io/blog/2014/04/11/starting/" title="Title">基于Github和Octopress搭建属于自己的博客</a></strong></p>
+
+<p><strong>2.<a href="http://biaobiaoqi.me/blog/2013/07/10/decorate-octopress/" title="Title">定制Octopress</a></strong></p>
+
+<p><strong>3.<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/" title="Title">象写程序一样写博客：搭建基于github的博客</a></strong></p>
 ]]></content>
   </entry>
   
