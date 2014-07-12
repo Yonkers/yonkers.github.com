@@ -4,7 +4,7 @@
   <title><![CDATA[Leeo's Blog]]></title>
   <link href="http://Yonkers.github.io/atom.xml" rel="self"/>
   <link href="http://Yonkers.github.io/"/>
-  <updated>2014-07-12T15:06:41+08:00</updated>
+  <updated>2014-07-12T15:26:24+08:00</updated>
   <id>http://Yonkers.github.io/</id>
   <author>
     <name><![CDATA[Leeo]]></name>
@@ -12,5 +12,14 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Test for first blog]]></title>
+    <link href="http://Yonkers.github.io/blog/2014/07/12/test-for-first-blog/"/>
+    <updated>2014-07-12T15:08:54+08:00</updated>
+    <id>http://Yonkers.github.io/blog/2014/07/12/test-for-first-blog</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
 </feed>
