@@ -1,0 +1,3 @@
+[submodule ".themes/budget-bumbago"]
+	path = .themes/budget-bumbago
+	url = git://github.com/octothemes/budget-bumbago.git
