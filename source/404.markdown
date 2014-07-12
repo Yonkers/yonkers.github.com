@@ -1,4 +1,4 @@
-yout: page
+layout: page
 
 title: "404 Error"
 
