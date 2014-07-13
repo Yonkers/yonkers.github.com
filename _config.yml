@@ -100,5 +100,9 @@ google_analytics_tracking_id:
 # Facebook Like
 #facebook_like: false
 
-#comment and share                                                                                    
+#weibo_user
+weibo_user: lyjinag
+weibo_share: true
+
+#comment and share                                      
 comment_and_share: true
