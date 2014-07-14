@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Leeo's Blog]]></title>
-  <link href="http://Yonkers.github.io/atom.xml" rel="self"/>
-  <link href="http://Yonkers.github.io/"/>
-  <updated>2014-07-14T21:19:22+08:00</updated>
-  <id>http://Yonkers.github.io/</id>
+  <link href="http://yonkers.github.io/atom.xml" rel="self"/>
+  <link href="http://yonkers.github.io/"/>
+  <updated>2014-07-14T22:51:08+08:00</updated>
+  <id>http://yonkers.github.io/</id>
   <author>
     <name><![CDATA[Leeo]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[常用工具集合]]></title>
-    <link href="http://Yonkers.github.io/blog/2014/07/14/tools/"/>
+    <link href="http://yonkers.github.io/blog/2014/07/14/tools/"/>
     <updated>2014-07-14T20:51:22+08:00</updated>
-    <id>http://Yonkers.github.io/blog/2014/07/14/tools</id>
+    <id>http://yonkers.github.io/blog/2014/07/14/tools</id>
     <content type="html"><![CDATA[<h2>(一)在线编辑</h2>
 
 <h3><strong>Markdown</strong>:</h3>
@@ -38,9 +38,9 @@
   
   <entry>
     <title type="html"><![CDATA[Test for first blog]]></title>
-    <link href="http://Yonkers.github.io/blog/2014/07/12/test-for-first-blog/"/>
+    <link href="http://yonkers.github.io/blog/2014/07/12/test-for-first-blog/"/>
     <updated>2014-07-12T15:08:54+08:00</updated>
-    <id>http://Yonkers.github.io/blog/2014/07/12/test-for-first-blog</id>
+    <id>http://yonkers.github.io/blog/2014/07/12/test-for-first-blog</id>
     <content type="html"><![CDATA[<h4>基于<strong>Octopress</strong> <strong>和Github</strong>得博客终于搭建好了，开始记录工作生活点滴！😄😄😄</h4>
 
 <p>参考博文：</p>
