@@ -4,7 +4,7 @@
   <title><![CDATA[Leeo's Blog]]></title>
   <link href="http://yonkers.github.io/atom.xml" rel="self"/>
   <link href="http://yonkers.github.io/"/>
-  <updated>2014-07-17T21:29:45+08:00</updated>
+  <updated>2014-07-17T22:25:50+08:00</updated>
   <id>http://yonkers.github.io/</id>
   <author>
     <name><![CDATA[Leeo]]></name>
@@ -49,7 +49,10 @@
 
 <p>当Android应用程序首次启动，系统会为程序主线程创建一个Looper对象，Looper实现了一个消息队列，循环处理Message。程序中所有重要的事件（如调用Activity的生命周期方法，按钮点击事件等）都是在Message对象中，这些Message对象被添加到了Looper的消息队列里面并且一个一个依次执行。主线程的Looper存在于应用程序的整个生命周期。</p>
 
-<p>当一个Handler在主线程实例化后，它就被关联到了Looper的消息队列中，Looper在处理消息时为了能够调用Hnadler的<code>handeMessage(Message)</code>方法，所以推送到消息队列的Message会持有一个Handler的引用。</p>
+<!--more-->
+
+
+<p>当一个Handler在主线程实例化后，它就被关联到了Looper的消息队列中，Looper在处理消息时为了能够调用Hnadler的<strong>handeMessage(Message)</strong>方法，所以推送到消息队列的Message会持有一个Handler的引用。</p>
 
 <blockquote><p>在Java中，非静态内部类和匿名类会持有一个外部类的引用，而静态的内部类则不会。</p></blockquote>
 
@@ -106,7 +109,7 @@
 
 <p>当Activity销毁时，这个延迟执行的消息在真正执行之前会在主线程的消息队列中存在10分钟，这个消息持有Handler的引用，而Handler持有它的外部类（SampleActivity）的引用。这个引用会一直存在直到消息被处理，这会阻止垃圾回收器回收activity上下文对象，以及程序所有资源。代码15行中匿名的Runnable对象同样也有这样的问题。<strong>非静态匿名类对象会持有其外部类对象的引用，所以会导致泄漏。</strong></p>
 
-<p>为了解决这个问题，可以定义Handler在一个新的文件中或者使用静态内部类。静态内部类不会持有外部类的引用，所以activity不会被泄漏。如果在Handler中需要调用外部Activity的方法，可以让Handler持有Activity的弱引用。要解决实例化Runnable时导致的内存泄漏，可以指定runnable对象为<code>static</code>（因为静态的匿名对象不会持有外部类的引用）</p>
+<p>为了解决这个问题，可以定义Handler在一个新的文件中或者使用静态内部类。静态内部类不会持有外部类的引用，所以activity不会被泄漏。如果在Handler中需要调用外部Activity的方法，可以让Handler持有Activity的弱引用。要解决实例化Runnable时导致的内存泄漏，可以指定runnable对象为<strong>static</strong>（因为静态的匿名对象不会持有外部类的引用）</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
