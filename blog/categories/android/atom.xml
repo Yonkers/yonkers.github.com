@@ -4,7 +4,7 @@
   <title><![CDATA[Category: android | Leeo's Blog]]></title>
   <link href="http://yonkers.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://yonkers.github.io/"/>
-  <updated>2014-07-17T22:25:50+08:00</updated>
+  <updated>2014-07-17T22:34:18+08:00</updated>
   <id>http://yonkers.github.io/</id>
   <author>
     <name><![CDATA[Leeo]]></name>
@@ -28,7 +28,7 @@ public class SampleActivity extends Activity {</p>
 <pre><code>@Override
 public void handleMessage(Message msg) {
   // ... 
-}
+}    
 </code></pre>
 
 <p>  }
