@@ -4,7 +4,7 @@
   <title><![CDATA[Leeo's Blog]]></title>
   <link href="http://yonkers.github.io/atom.xml" rel="self"/>
   <link href="http://yonkers.github.io/"/>
-  <updated>2014-07-15T00:31:49+08:00</updated>
+  <updated>2014-07-17T21:29:45+08:00</updated>
   <id>http://yonkers.github.io/</id>
   <author>
     <name><![CDATA[Leeo]]></name>
@@ -12,6 +12,200 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Android中Activity是如何导致内存泄漏的：Handler 与 Inner Calass(内部类)]]></title>
+    <link href="http://yonkers.github.io/blog/2014/07/17/inner-class-handler-memory-leak/"/>
+    <updated>2014-07-17T21:13:15+08:00</updated>
+    <id>http://yonkers.github.io/blog/2014/07/17/inner-class-handler-memory-leak</id>
+    <content type="html"><![CDATA[<p>首先思考下面的代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Handler</span> <span class="n">mLeakyHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Handler</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// ... </span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>虽然不是很明显，但是这段代码的确会导致严重的内存泄漏，Android会给出如下的警告:</p>
+
+<blockquote><p>在Android中，Handler类需要定义为static，否则可能会导致内存泄漏。</p></blockquote>
+
+<p>但是哪里会导致泄漏，泄漏是如何产生的呢？让我门首先阅读下面的文档：</p>
+
+<p>当Android应用程序首次启动，系统会为程序主线程创建一个Looper对象，Looper实现了一个消息队列，循环处理Message。程序中所有重要的事件（如调用Activity的生命周期方法，按钮点击事件等）都是在Message对象中，这些Message对象被添加到了Looper的消息队列里面并且一个一个依次执行。主线程的Looper存在于应用程序的整个生命周期。</p>
+
+<p>当一个Handler在主线程实例化后，它就被关联到了Looper的消息队列中，Looper在处理消息时为了能够调用Hnadler的<code>handeMessage(Message)</code>方法，所以推送到消息队列的Message会持有一个Handler的引用。</p>
+
+<blockquote><p>在Java中，非静态内部类和匿名类会持有一个外部类的引用，而静态的内部类则不会。</p></blockquote>
+
+<p>因此，内存泄漏到底发生在哪呢？虽然比较隐藏，但是思考下面的代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Handler</span> <span class="n">mLeakyHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Handler</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// ...</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Override</span>
+</span><span class='line'>  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Post a message and delay its execution for 10 minutes.</span>
+</span><span class='line'>    <span class="n">mLeakyHandler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
+</span><span class='line'>    <span class="o">},</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">1000</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Go back to the previous Activity.</span>
+</span><span class='line'>    <span class="n">finish</span><span class="o">();</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当Activity销毁时，这个延迟执行的消息在真正执行之前会在主线程的消息队列中存在10分钟，这个消息持有Handler的引用，而Handler持有它的外部类（SampleActivity）的引用。这个引用会一直存在直到消息被处理，这会阻止垃圾回收器回收activity上下文对象，以及程序所有资源。代码15行中匿名的Runnable对象同样也有这样的问题。<strong>非静态匿名类对象会持有其外部类对象的引用，所以会导致泄漏。</strong></p>
+
+<p>为了解决这个问题，可以定义Handler在一个新的文件中或者使用静态内部类。静态内部类不会持有外部类的引用，所以activity不会被泄漏。如果在Handler中需要调用外部Activity的方法，可以让Handler持有Activity的弱引用。要解决实例化Runnable时导致的内存泄漏，可以指定runnable对象为<code>static</code>（因为静态的匿名对象不会持有外部类的引用）</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/**</span>
+</span><span class='line'><span class="cm">   * Instances of static inner classes do not hold an implicit</span>
+</span><span class='line'><span class="cm">   * reference to their outer class.</span>
+</span><span class='line'><span class="cm">   */</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">MyHandler</span> <span class="kd">extends</span> <span class="n">Handler</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">SampleActivity</span><span class="o">&gt;</span> <span class="n">mActivity</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="nf">MyHandler</span><span class="o">(</span><span class="n">SampleActivity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">mActivity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakReference</span><span class="o">&lt;</span><span class="n">SampleActivity</span><span class="o">&gt;(</span><span class="n">activity</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMessage</span><span class="o">(</span><span class="n">Message</span> <span class="n">msg</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">SampleActivity</span> <span class="n">activity</span> <span class="o">=</span> <span class="n">mActivity</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">activity</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="c1">// ...</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">MyHandler</span> <span class="n">mHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyHandler</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/**</span>
+</span><span class='line'><span class="cm">   * Instances of anonymous classes do not hold an implicit</span>
+</span><span class='line'><span class="cm">   * reference to their outer class when they are &quot;static&quot;.</span>
+</span><span class='line'><span class="cm">   */</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Runnable</span> <span class="n">sRunnable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
+</span><span class='line'>  <span class="o">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Override</span>
+</span><span class='line'>  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Post a message and delay its execution for 10 minutes.</span>
+</span><span class='line'>    <span class="n">mHandler</span><span class="o">.</span><span class="na">postDelayed</span><span class="o">(</span><span class="n">sRunnable</span><span class="o">,</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">1000</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Go back to the previous Activity.</span>
+</span><span class='line'>    <span class="n">finish</span><span class="o">();</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>虽然静态内部类和非静态内部类的区别很小，但是作为Aandroid开发者是需要了解的。在Activity中，如果内部类对象的生命周期长于其外部类对象，那么避免使用非静态内部类，否则使用静态内部类，并让其持有外部类对象的弱引用。</p>
+
+<p>有任何问题欢迎留言！</p>
+
+<p>原文：<a href="http://www.androiddesignpatterns.com/2013/01/inner-class-handler-memory-leak.html">How to Leak a Context: Handlers &amp; Inner Classes</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[常用工具集合]]></title>

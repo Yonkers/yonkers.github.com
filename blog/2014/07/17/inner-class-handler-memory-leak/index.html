@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Leeo's Blog</title>
+  <title>Android中Activity是如何导致内存泄漏的：Handler 与 Inner Calass(内部类) - Leeo's Blog</title>
   <meta name="author" content="Leeo">
 
   
@@ -27,7 +27,7 @@ public class SampleActivity extends Activity { private final Handler mLeakyHandl
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://yonkers.github.io/">
+  <link rel="canonical" href="http://yonkers.github.io/blog/2014/07/17/inner-class-handler-memory-leak/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -101,15 +101,12 @@ $(document).bind('DOMNodeInserted', function(event) {
   <div id="body"  >
     <div id="main">
       <div id="content">
-        <div class="blog-index">
+        <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/07/17/inner-class-handler-memory-leak/">Android中Activity是如何导致内存泄漏的：Handler 与 Inner Calass(内部类)</a></h1>
+      <h1 class="entry-title">Android中Activity是如何导致内存泄漏的：Handler 与 Inner Calass(内部类)</h1>
     
     
       <p class="meta">
@@ -132,7 +129,7 @@ $(document).bind('DOMNodeInserted', function(event) {
   </header>
 
 
-  <div class="entry-content"><p>首先思考下面的代码：</p>
+<div class="entry-content"><p>首先思考下面的代码：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -319,72 +316,16 @@ $(document).bind('DOMNodeInserted', function(event) {
 
 <p>原文：<a href="http://www.androiddesignpatterns.com/2013/01/inner-class-handler-memory-leak.html">How to Leak a Context: Handlers &amp; Inner Classes</a></p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/07/14/tools/">常用工具集合</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Leeo</span></span>
 
-<time datetime="2014-07-14T20:51:22+08:00" pubdate data-updated="true">Jul 14<sup>th</sup>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>(一)在线编辑</h2>
-
-<h3><strong>Markdown</strong>:</h3>
-
-<ul>
-<li><strong>Stackedit</strong>: <a href="https://stackedit.io"><code>https://stackedit.io</code></a></li>
-</ul>
-
-
-<h3><strong>Json</strong>:</h3>
-
-<ul>
-<li><a href="http://www.bejson.com/go.php?u=http://www.bejson.com/jsonviewernew/"><code>http://www.bejson.com/go.php?u=http://www.bejson.com/jsonviewernew/</code></a></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/07/12/test-for-first-blog/">Test for First Blog</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -396,35 +337,50 @@ $(document).bind('DOMNodeInserted', function(event) {
   
 
 
-<time datetime="2014-07-12T15:08:54+08:00" pubdate data-updated="true">Jul 12<sup>th</sup>, 2014</time>
-        
-      </p>
+<time datetime="2014-07-17T21:13:15+08:00" pubdate data-updated="true">Jul 17<sup>th</sup>, 2014</time>
+      
+
+
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><h4>基于<strong>Octopress</strong> <strong>和Github</strong>得博客终于搭建好了，开始记录工作生活点滴！😄😄😄</h4>
-
-<p>参考博文：</p>
-
-<p><strong>1.<a href="http://msching.github.io/blog/2014/04/11/starting/" title="Title">基于Github和Octopress搭建属于自己的博客</a></strong></p>
-
-<p><strong>2.<a href="http://biaobiaoqi.me/blog/2013/07/10/decorate-octopress/" title="Title">定制Octopress</a></strong></p>
-
-<p><strong>3.<a href="http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/" title="Title">象写程序一样写博客：搭建基于github的博客</a></strong></p>
+      <div class="sharing">
+  
+  
+  
+  
+       <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+	<span class="jiathis_txt">分享到：</span>
+	<a class="jiathis_button_qzone">QQ空间</a>
+	<a class="jiathis_button_tsina">新浪微博</a>
+	<a class="jiathis_button_tqq">腾讯微博</a>
+	<a class="jiathis_button_weixin">微信</a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+	<a class="jiathis_counter_style"></a>
 </div>
-  
-  
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1393940244935272" charset="utf-8"></script>
+<!-- JiaThis Button END -->
 
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js"></script>
+<!-- UY END -->
 
-    </article>
   
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
 </div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/14/tools/" title="Previous Post: 常用工具集合">&laquo; 常用工具集合</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
 <aside class="sidebar">
   
     <section>
@@ -464,6 +420,7 @@ $(document).bind('DOMNodeInserted', function(event) {
 
   
 </aside>
+
 
       </div>
     </div>
