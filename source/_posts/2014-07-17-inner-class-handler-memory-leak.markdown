@@ -14,7 +14,7 @@ public class SampleActivity extends Activity {
     @Override
     public void handleMessage(Message msg) {
       // ... 
-    }
+    }    
   }
 }
 ```
